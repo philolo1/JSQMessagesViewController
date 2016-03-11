@@ -26,12 +26,21 @@
 #import "UIImage+JSQMessages.h"
 #import "UIView+JSQMessages.h"
 
+#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
+
 static void * kJSQMessagesInputToolbarKeyValueObservingContext = &kJSQMessagesInputToolbarKeyValueObservingContext;
 
 
 @interface JSQMessagesInputToolbar ()
 
 @property (assign, nonatomic) BOOL jsq_isObserving;
+
+- (void)jsq_leftBarButtonPressed:(UIButton *)sender;
+- (void)jsq_rightBarButtonPressed:(UIButton *)sender;
+
+- (void)jsq_addObservers;
+- (void)jsq_removeObservers;
 
 @end
 
@@ -47,6 +56,8 @@ static void * kJSQMessagesInputToolbarKeyValueObservingContext = &kJSQMessagesIn
 {
     [super awakeFromNib];
     [self setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
+    self.backgroundColor = [UIColor whiteColor];
 
     self.jsq_isObserving = NO;
     self.sendButtonOnRight = YES;
@@ -66,6 +77,15 @@ static void * kJSQMessagesInputToolbarKeyValueObservingContext = &kJSQMessagesIn
     self.contentView.leftBarButtonItem = [JSQMessagesToolbarButtonFactory defaultAccessoryButtonItem];
     self.contentView.rightBarButtonItem = [JSQMessagesToolbarButtonFactory defaultSendButtonItem];
 
+   // self.contentView.layer.borderColor = [UIColor redColor].CGColor;
+    
+   CALayer *TopBorder = [CALayer layer];
+    TopBorder.frame = CGRectMake(0.0f, -1.0 / [UIScreen mainScreen].scale , [UIScreen mainScreen].bounds.size.width, 1.0 / [UIScreen mainScreen].scale);
+    TopBorder.backgroundColor = UIColorFromRGB(0xCCCCCC).CGColor;
+    [self.layer addSublayer:TopBorder];
+    
+    
+    
     [self toggleSendButtonEnabled];
 }
 
@@ -80,6 +100,7 @@ static void * kJSQMessagesInputToolbarKeyValueObservingContext = &kJSQMessagesIn
 - (void)dealloc
 {
     [self jsq_removeObservers];
+    _contentView = nil;
 }
 
 #pragma mark - Setters

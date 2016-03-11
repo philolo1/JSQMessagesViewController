@@ -22,6 +22,8 @@
 #import "UIImage+JSQMessages.h"
 #import "NSBundle+JSQMessages.h"
 
+#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
 
 @implementation JSQMessagesToolbarButtonFactory
 
@@ -48,16 +50,16 @@
 
     UIButton *sendButton = [[UIButton alloc] initWithFrame:CGRectZero];
     [sendButton setTitle:sendTitle forState:UIControlStateNormal];
-    [sendButton setTitleColor:[UIColor jsq_messageBubbleBlueColor] forState:UIControlStateNormal];
-    [sendButton setTitleColor:[[UIColor jsq_messageBubbleBlueColor] jsq_colorByDarkeningColorWithValue:0.1f] forState:UIControlStateHighlighted];
-    [sendButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
+    [sendButton setTitleColor:UIColorFromRGB(0x007EE5) forState:UIControlStateNormal];
+    [sendButton setTitleColor:UIColorFromRGB(0x007EE5) forState:UIControlStateHighlighted];
+    [sendButton setTitleColor:UIColorFromRGB(0xCCCCCC) forState:UIControlStateDisabled];
 
-    sendButton.titleLabel.font = [UIFont boldSystemFontOfSize:17.0f];
+    sendButton.titleLabel.font =  [UIFont fontWithName:@"Roboto-Regular" size:17.0];
     sendButton.titleLabel.adjustsFontSizeToFitWidth = YES;
     sendButton.titleLabel.minimumScaleFactor = 0.85f;
     sendButton.contentMode = UIViewContentModeCenter;
     sendButton.backgroundColor = [UIColor clearColor];
-    sendButton.tintColor = [UIColor jsq_messageBubbleBlueColor];
+    sendButton.tintColor = UIColorFromRGB(0x007ee5);
 
     CGFloat maxHeight = 32.0f;
 

@@ -27,6 +27,14 @@
 @property (strong, nonatomic, readonly) UIImage *bubbleImage;
 @property (assign, nonatomic, readonly) UIEdgeInsets capInsets;
 
+- (UIEdgeInsets)jsq_centerPointEdgeInsetsForImageSize:(CGSize)bubbleImageSize;
+
+- (JSQMessagesBubbleImage *)jsq_messagesBubbleImageWithColor:(UIColor *)color flippedForIncoming:(BOOL)flippedForIncoming;
+
+- (UIImage *)jsq_horizontallyFlippedImageFromImage:(UIImage *)image;
+
+- (UIImage *)jsq_stretchableImageFromImage:(UIImage *)image withCapInsets:(UIEdgeInsets)capInsets;
+
 @end
 
 
@@ -55,7 +63,12 @@
 
 - (instancetype)init
 {
-    return [self initWithBubbleImage:[UIImage jsq_bubbleCompactImage] capInsets:UIEdgeInsetsZero];
+    return [self initWithBubbleImage:[UIImage jsq_bubbleRegularTaillessImage] capInsets:UIEdgeInsetsZero];
+}
+
+- (void)dealloc
+{
+    _bubbleImage = nil;
 }
 
 #pragma mark - Public
@@ -83,7 +96,7 @@
 {
     NSParameterAssert(color != nil);
     
-    UIImage *normalBubble = [self.bubbleImage jsq_imageMaskedWithColor:color];
+    UIImage *normalBubble = [self.bubbleImage  jsq_imageMaskedWithColor:color];
     UIImage *highlightedBubble = [self.bubbleImage jsq_imageMaskedWithColor:[color jsq_colorByDarkeningColorWithValue:0.12f]];
     
     if (flippedForIncoming) {
